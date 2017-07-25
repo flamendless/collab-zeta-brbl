@@ -1,0 +1,11 @@
+[submodule "modules/anim8"]
+path = modules/anim8
+url = https://github.com/kikito/anim8.git 
+
+[submodule "modules/LOVEDEBUG"]
+path = modules/LOVEDEBUG
+url = https://github.com/Ranguna/LOVEDEBUG.git 
+
+[submodule "modules/classic"]
+path = modules/classic
+url = https://github.com/rxi/classic.git  
