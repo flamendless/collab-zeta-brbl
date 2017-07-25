@@ -1,7 +1,7 @@
 require("modules/LOVEDEBUG/lovedebug")
-local test = require("test")
 
-local input = require("src/input")()
+local em = require("src/entityManager")
+local test = require("test")
 
 function love.load()
 	test:load()
@@ -21,9 +21,9 @@ function love.draw()
 end
 
 function love.keypressed(key)
-	input:check(key,"keypressed")
+	test:keypressed(key)
 end
 
 function love.keyreleased(key)
-	input:check(key,"keyreleased")
+	test:keyreleased(key)
 end
