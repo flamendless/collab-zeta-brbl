@@ -1,9 +1,12 @@
 local classic = require("modules/classic/classic")
 local test = classic:extend()
-local em = require("src/entityManager")
+em = require("src/entityManager")()
+
+player = require("entities/player")
+player1 = player(50, 50, 100, 100)
 
 function test:load()
-
+	em:add(player1)
 end
 
 function test:update(dt)

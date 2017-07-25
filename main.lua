@@ -1,6 +1,4 @@
 require("modules/LOVEDEBUG/lovedebug")
-
-local em = require("src/entityManager")
 local test = require("test")
 
 function love.load()

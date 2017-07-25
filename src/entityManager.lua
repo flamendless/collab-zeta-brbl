@@ -9,6 +9,14 @@ function em:add(ent)
 	table.insert(self.entities, ent)
 end
 
+function em:getEntity(ent)
+	for k,v in pairs(self.entities) do
+		if v.tag == ent then
+			return v
+		end
+	end
+end
+
 function em:update(dt)
 	for k,v in pairs(self.entities) do
 		if v.update ~= nil then
