@@ -10,7 +10,7 @@ function player:new(x, y, speed)
 	self.speed = speed
 	self.yvel = 0
 	self.jumpheight = -100
-	self.gravity = -100
+	self.gravity = -200
 end
 
 function player:draw()
@@ -48,10 +48,6 @@ function player:update(dt)
 		end
 		self.yvel = 0
 	end
-end
-
-function player:keypressed(key)
-	
 end
 
 return player

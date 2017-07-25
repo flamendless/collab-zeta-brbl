@@ -1,27 +1,31 @@
 require("modules/LOVEDEBUG/lovedebug")
-local test = require("test")
+
+em = require("src/entityManager")()
+lm = require("src/levelManager")()
+
+local level1 = require("levels/level1")
 
 function love.load()
-	test:load()
+	lm:switch(level1)
 end
 
 function love.update(dt)
-	test:update(dt)
+	lm:update(dt)
 end
 
 function love.draw()
 	love.graphics.push()
 	love.graphics.scale(game.ratio, game.ratio)
 
-	test:draw()	
+	lm:draw()	
 
 	love.graphics.pop()
 end
 
 function love.keypressed(key)
-	test:keypressed(key)
+	lm:keypressed(key)
 end
 
 function love.keyreleased(key)
-	test:keyreleased(key)
+	lm:keyreleased(key)
 end

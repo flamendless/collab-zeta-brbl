@@ -1,28 +1,26 @@
 local classic = require("modules/classic/classic")
 local test = classic:extend()
 em = require("src/entityManager")()
-
-player = require("entities/player")
-player1 = player(50, 50, 100, 100)
+lm = require("src/levelManager")()
 
 function test:load()
-	em:add(player1)
+	lm:load()
 end
 
 function test:update(dt)
-	em:update(dt)
+	lm:update(dt)
 end
 
 function test:draw()
-	em:draw()
+	lm:draw()
 end
 
 function test:keypressed(key)
-	em:keypressed(key)
+	lm:keypressed(key)
 end
 
 function test:keyreleased(key)
-	em:keyreleased(key)
+	lm:keyreleased(key)
 end
 
 return test
