@@ -1,6 +1,7 @@
 local classic = require("modules/classic/classic")
 local missile = classic:extend()
 local warning = require("entities/warning")
+local ct = require("src/colorTimer")
 
 --set up grid system for missile path
 local grid = {}
@@ -21,8 +22,7 @@ local colors = {
 	{255,175,175}, --half
 	{255,255,255}, --white
 }
---timer to change missile's color per second
-local timerColor = 3
+local c = ct(3, colors)
 
 function missile:new()
 	self.image = love.graphics.newImage("assets/missile.png")
@@ -57,16 +57,7 @@ end
 
 function missile:update(dt)
 	self:checkOverlap(dt)
-
-	--process the timer for the missile's color
-	timerColor = timerColor - 1 * dt
-	if timerColor > 1 then
-		self.color = colors[math.floor(timerColor)]
-	end
-	--reset the timer
-	if timerColor <= 0 then
-		timerColor = 3
-	end
+	c:update(dt)
 	--move the missile downwards
 	if self.y + self.h then
 		self.y = self.y + self.speed * dt
@@ -74,7 +65,7 @@ function missile:update(dt)
 end
 
 function missile:draw()
-	love.graphics.setColor(self.color)
+	love.graphics.setColor(c:get())
 	love.graphics.draw(self.image, self.x, self.y)
 
 	--debugging: draw the grid lines
