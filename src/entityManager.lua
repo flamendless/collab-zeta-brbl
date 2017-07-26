@@ -9,6 +9,10 @@ function em:add(ent)
 	table.insert(self.entities, ent)
 end
 
+function em:remove(ent)
+	table.remove(self.entities, ent)
+end
+
 function em:getEntity(ent)
 	for k,v in pairs(self.entities) do
 		if v.tag == ent then

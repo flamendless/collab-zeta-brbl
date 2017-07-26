@@ -2,8 +2,14 @@ function love.conf(t)
 	t.window.title = "Collab"
 	t.window.width = 1080
 	t.window.height = 720
-	io.stdout:setvbuf("no")
 
+	--print to console in real time
+	io.stdout:setvbuf("no")
+	
+	--for debugging tests
+	debugging = true
+
+	--defaults
 	game = {}
 	game.wWidth = 1080
 	game.wHeight = 720
