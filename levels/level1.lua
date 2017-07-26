@@ -51,29 +51,22 @@ function level1:update(dt)
 			em:add(r)
 		end
 	end
-	
-	--remove missiles if passed the window height
-	for k,v in pairs(em.entities) do
-		if v.tag == "Missile" then
-			if v.y > game.gHeight then
-				em:remove(k)
-				break
-			end
-		end
-		
-		--remove the runner if passed the two sides
-		if v.tag == "Runner" then
-			if v.x < -512 or v.x > game.gWidth + 512 then
-				em:remove(k)
-				break
-			end
-		end
-	end
+	--check remove condition for each entity
+	--memory management
+	em:removeConditions()
 end
 
 function level1:draw()
 	--draw all entities
 	em:draw()
+end
+
+function level1:keypressed(key)
+	em:keypressed(key)
+end
+
+function level1:keyreleased(key)
+	em:keyreleased(key)
 end
 
 return level1

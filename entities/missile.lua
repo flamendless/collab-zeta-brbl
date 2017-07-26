@@ -77,4 +77,8 @@ function missile:draw()
 	end
 end
 
+function missile:onRemoveCondtion()
+	return self.y > game.gHeight
+end
+
 return missile

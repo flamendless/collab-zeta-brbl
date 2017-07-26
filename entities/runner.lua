@@ -41,5 +41,9 @@ function runner:draw()
 	love.graphics.draw(self.image,self.x,self.y, 0, self.dir, 1)
 end
 
+function runner:onRemoveCondtion()
+	return self.x < -512 or self.x > gamegWidth + 512
+end
+
 return runner
 

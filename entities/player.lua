@@ -1,6 +1,10 @@
 local class = require("modules/classic/classic")
 local player = class:extend()
 
+local bullet = require("entities/bullet")
+local bulletDirX = 0
+local bulletDirY = 0
+
 function player:new(x, y, speed)
 	self.image = love.graphics.newImage("assets/square.png")
 	self.x = x
@@ -23,7 +27,6 @@ function player:update(dt)
 	local left = love.keyboard.isDown("a")
 	local right = love.keyboard.isDown("d")
 	local jump = love.keyboard.isDown("space")
-
 	--input evaluations
 	if left then
 		--keep the obj inside the screen
@@ -61,6 +64,28 @@ function player:update(dt)
 		end
 		self.yvel = 0
 	end
+end
+
+function player:keypressed(key)
+	local sLeft = "j"
+	local sRight = "l"
+	local sUp = "i"
+
+	if key == sLeft then
+		bulletDirX = -1	
+		bulletDirY = 0
+	elseif key == sRight then
+		bulletDirX = 1
+		bulletDirY = 0
+	elseif key == sUp then
+		bulletDirX = 0
+		bulletDirY = -1
+	end
+	if key == sLeft or key == sRight or key == sUp then
+		local b = bullet(self.x,self.y,bulletDirX,bulletDirY)
+		em:add(b)
+	end
+
 end
 
 return player

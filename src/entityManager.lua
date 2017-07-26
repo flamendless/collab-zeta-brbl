@@ -21,6 +21,21 @@ function em:getEntity(ent)
 	end
 end
 
+--check remove condition for each entity
+--memory management
+function em:removeConditions()
+	for k,v in pairs(em.entities) do
+		if v.tag == "Missile" or
+			v.tag == "Runner" or
+			v.tag == "Bullet" then
+			if v:onRemoveCondtion() then
+				em:remove(k)
+				break
+			end
+		end
+	end
+end
+
 function em:update(dt)
 	for k,v in pairs(self.entities) do
 		if v.update ~= nil then
