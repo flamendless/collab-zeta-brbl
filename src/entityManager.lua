@@ -10,7 +10,15 @@ function em:add(ent)
 end
 
 function em:remove(ent)
-	table.remove(self.entities, ent)
+	if type(ent) ~= "number" then
+		for k,v in pairs(self.entities) do
+			if v == ent then
+				table.remove(self.entities,k)
+			end
+		end
+	else
+		table.remove(self.entities, ent)
+	end
 end
 
 function em:getEntity(ent)
@@ -24,16 +32,37 @@ end
 --check remove condition for each entity
 --memory management
 function em:removeConditions()
-	for k,v in pairs(em.entities) do
-		if v.tag == "Missile" or
-			v.tag == "Runner" or
-			v.tag == "Bullet" then
-			if v:onRemoveCondtion() then
-				em:remove(k)
+	for k,v in pairs(self.entities) do
+		--make sure the remove condition function exists!
+		if v.onRemoveCondition ~= nil then
+			if v:onRemoveCondition() then
+				self:remove(k)
 				break
 			end
 		end
 	end
+end
+
+function em:checkCollisions()
+	for k,v in pairs(self.entities) do
+		for n,m in pairs(self.entities) do
+			if v ~= m then
+				if v.onCollision ~= nil and
+					m.onCollision ~= nil then
+					if self:collision(v,m) then
+						v:onCollision(m)
+					end
+				end
+			end
+		end
+	end
+end
+
+function em:collision(obj1, obj2)
+	return obj1.x < obj2.x + obj2.w and
+		obj2.x < obj1.x + obj1.w and
+		obj1.y < obj2.y + obj2.h and
+		obj2.y < obj1.y + obj1.h
 end
 
 function em:update(dt)

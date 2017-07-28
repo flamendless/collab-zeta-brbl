@@ -1,13 +1,19 @@
 local classic = require("modules/classic/classic")
 local bullet = classic:extend()
 
+local imgBullet = love.graphics.newImage("assets/bullet.png")
+imgBullet:setFilter("nearest","nearest")
+
 function bullet:new(x,y,xdir,ydir)
+	self.img = imgBullet
+	self.w, self.h = self.img:getDimensions()
 	self.x = x
 	self.y = y
 	self.xdir = xdir
 	self.ydir = ydir
 	self.speed = 200
 	self.tag = "Bullet"
+	self.damage = 30
 end
 
 function bullet:update(dt)
@@ -21,8 +27,16 @@ function bullet:update(dt)
 end
 
 function bullet:draw()
-	love.graphics.setColor(255,0,0)
-	love.graphics.circle("fill",self.x,self.y,4)
+	love.graphics.setColor(255,255,255)
+	love.graphics.draw(self.img, self.x, self.y)
+end
+
+function bullet:onCollision(object)
+	local obj = object.tag
+	if obj == "Missile" then
+		object.hp = object.hp - self.damage
+		em:remove(self)
+	end
 end
 
 function bullet:onRemoveCondition()

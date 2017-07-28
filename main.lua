@@ -9,6 +9,7 @@ lm = require("src/levelManager")()
 local level1 = require("levels/level1")
 
 function love.load()
+	love.graphics.setDefaultFilter("nearest","nearest",1)
 	--start at level1
 	lm:switch(level1)
 end
@@ -21,7 +22,8 @@ end
 function love.draw()
 	--set the screen to scale (zoom)
 	love.graphics.push()
-	love.graphics.scale(game.ratio, game.ratio)
+	love.graphics.translate(game.wWidth/2, game.wHeight/2)
+	--love.graphics.scale(game.ratio, game.ratio)
 	love.graphics.setColor(255,255,255)
 	
 	--debugging: gWidth,gHeight window borders and FPS

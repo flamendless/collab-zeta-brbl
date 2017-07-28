@@ -54,6 +54,8 @@ function level1:update(dt)
 	--check remove condition for each entity
 	--memory management
 	em:removeConditions()
+	--check collision for each entity
+	em:checkCollisions()
 end
 
 function level1:draw()

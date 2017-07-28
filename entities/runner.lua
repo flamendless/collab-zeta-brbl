@@ -8,11 +8,15 @@ local position = {-val,game.gWidth+val}
 --randomize seed
 math.randomseed(os.time())
 
+local imgRunner = love.graphics.newImage("assets/cactuar.png")
+imgRunner:setFilter("nearest","nearest",1)
+
 function runner:new()
-	self.image = love.graphics.newImage("assets/cactuar.png")
+	self.image = imgRunner
 	self.x = position[math.floor(math.random(1,#position))]
 	self.y = game.gHeight
 	self.speed = 100
+	self.w = self.image:getWidth()
 	self.h = self.image:getHeight()	
 	self.dir = 1
 
@@ -41,8 +45,12 @@ function runner:draw()
 	love.graphics.draw(self.image,self.x,self.y, 0, self.dir, 1)
 end
 
-function runner:onRemoveCondtion()
-	return self.x < -512 or self.x > gamegWidth + 512
+function runner:onRemoveCondition()
+	return self.x < -512 or self.x > game.gWidth + 512
+end
+
+function runner:onCollision(obj)
+
 end
 
 return runner
