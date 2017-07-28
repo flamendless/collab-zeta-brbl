@@ -4,6 +4,7 @@ local player = class:extend()
 local bullet = require("entities/bullet")
 local bulletDirX = 0
 local bulletDirY = 0
+local shield = require("entities/shield")
 
 function player:new(x, y, speed)
 	self.image = love.graphics.newImage("assets/square.png")
@@ -70,6 +71,7 @@ function player:keypressed(key)
 	local sLeft = "j"
 	local sRight = "l"
 	local sUp = "i"
+	local sShield = "q"
 
 	if key == sLeft then
 		bulletDirX = -1	
@@ -84,6 +86,9 @@ function player:keypressed(key)
 	if key == sLeft or key == sRight or key == sUp then
 		local b = bullet(self.x,self.y,bulletDirX,bulletDirY)
 		em:add(b)
+	elseif key == sShield then
+		local sh = shield(self.x,self.y)
+		em:add(sh)
 	end
 
 end
