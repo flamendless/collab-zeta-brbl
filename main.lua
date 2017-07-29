@@ -1,5 +1,5 @@
 --for debugging
-require("modules/LOVEDEBUG/lovedebug")
+--require("modules/LOVEDEBUG/lovedebug")
 
 --very important core modules
 em = require("src/entityManager")()
@@ -22,8 +22,11 @@ end
 function love.draw()
 	--set the screen to scale (zoom)
 	love.graphics.push()
-	love.graphics.translate(game.wWidth/2, game.wHeight/2)
-	--love.graphics.scale(game.ratio, game.ratio)
+	if not game.scale then
+		love.graphics.translate(game.wWidth/2, game.wHeight/2)
+	else
+		love.graphics.scale(game.ratio, game.ratio)
+	end
 	love.graphics.setColor(255,255,255)
 	
 	--debugging: gWidth,gHeight window borders and FPS
@@ -39,6 +42,12 @@ end
 
 function love.keypressed(key)
 	lm:keypressed(key)
+
+	if debugging then
+		if key == "o" then
+			game.scale = not game.scale
+		end
+	end
 end
 
 function love.keyreleased(key)

@@ -1,7 +1,7 @@
 local classic = require("modules/classic/classic")
 local missile = classic:extend()
 local warning = require("entities/warning")
-local ct = require("src/colorTimer")
+local ht = require("src/hitTimer")
 
 --set up grid system for missile path
 local grid = {}
@@ -16,14 +16,6 @@ for i = 1, gridN do
 	grid[i] = x
 end
 
---color tables for timerColor
-local colors = {
-	{255,0,0}, --red
-	{255,175,175}, --half
-	{255,255,255}, --white
-}
-local c = ct(3, colors)
-
 local imgMissile = love.graphics.newImage("assets/missile.png")
 imgMissile:setFilter("nearest","nearest",1)
 
@@ -37,12 +29,12 @@ function missile:new()
 	--start at above the visible screen
 	self.y = -self.h * 2
 	self.speed = math.random(100,200)
-	self.color = colors[1]
 	self.tag = "Missile"
 
 	--missile stats
 	self.hp = 100
-
+	self.hit = false
+	self.ht = ht(self,0.25)
 	--create a warning sign
 	self.warning = warning(self.x)
 	em:add(self.warning)
@@ -67,7 +59,6 @@ end
 
 function missile:update(dt)
 	self:checkOverlap(dt)
-	c:update(dt)
 	--move the missile downwards
 	if self.y + self.h then
 		self.y = self.y + self.speed * dt
@@ -81,10 +72,15 @@ function missile:update(dt)
 		self.warning.remove = true
 		em:remove(self)
 	end
+	--hit timer
+	self.ht:update(dt)
 end
 
 function missile:draw()
-	love.graphics.setColor(c:get())
+	love.graphics.setColor(255,255,255)
+	if self.hit then
+		love.graphics.setColor(255,0,0)
+	end
 	love.graphics.draw(self.image, self.x, self.y)
 
 	--debugging: draw the grid lines
@@ -94,7 +90,9 @@ function missile:draw()
 			love.graphics.line(i*gridW,0,i*gridW,game.gHeight)
 		end
 	end
-	love.graphics.rectangle("fill", self.x,self.y,self.w,self.h)
+end
+
+function missile:onCollision(object)
 end
 
 function missile:onRemoveCondition()

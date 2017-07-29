@@ -18,4 +18,5 @@ function love.conf(t)
 	game.ratio = math.min(
 		(game.wWidth/game.gWidth),
 		(game.wHeight/game.gHeight))
+	game.scale = true
 end

@@ -1,10 +1,13 @@
 local class = require("modules/classic/classic")
 local player = class:extend()
+local particles = require("src.particles")
+local quads = require("src.quads")
 
 local bullet = require("entities/bullet")
 local bulletDirX = 0
 local bulletDirY = 0
 local shield = require("entities/shield")
+local spawned = false
 
 function player:new(x, y, speed)
 	self.image = love.graphics.newImage("assets/square.png")
@@ -16,6 +19,8 @@ function player:new(x, y, speed)
 	self.yvel = 0
 	self.jumpheight = -100
 	self.gravity = -200
+	self.tag = "Player"
+	self.death = false
 end
 
 function player:draw()
@@ -65,6 +70,15 @@ function player:update(dt)
 		end
 		self.yvel = 0
 	end
+
+	--death
+	if self.death then
+		--spawn death object	
+		if not spawned then
+			spawned = true
+			local q = quads(self.image,2,self.x,self.y)
+		end
+	end
 end
 
 function player:keypressed(key)
@@ -90,7 +104,14 @@ function player:keypressed(key)
 		local sh = shield(self.x,self.y)
 		em:add(sh)
 	end
+end
 
+function player:onCollision(object)
+	local objTag = object.tag
+	if objTag == "Missile" or
+		objTag == "Runner" then
+		self.death = true
+	end
 end
 
 return player

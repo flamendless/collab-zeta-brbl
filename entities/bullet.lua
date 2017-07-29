@@ -33,8 +33,15 @@ end
 
 function bullet:onCollision(object)
 	local obj = object.tag
-	if obj == "Missile" then
+	if obj == "Missile" or obj == "Runner" then
+		if object.hit then
+			self.damage = 20
+		else
+			self.damage = 30
+		end
 		object.hp = object.hp - self.damage
+		object.hit = true
+		--remove bullet
 		em:remove(self)
 	end
 end

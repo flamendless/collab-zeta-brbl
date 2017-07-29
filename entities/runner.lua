@@ -1,5 +1,6 @@
 local class = require("modules/classic/classic")
 local runner = class:extend()
+local ht = require("src/hitTimer")
 
 --set starting possible spawn positions
 local val = 256
@@ -19,7 +20,9 @@ function runner:new()
 	self.w = self.image:getWidth()
 	self.h = self.image:getHeight()	
 	self.dir = 1
-
+	self.hp = 100
+	self.hit = false
+	self.ht = ht(self,0.25)
 	--check where facing
 	if self.x == position[1] then
 		self.dir = 1
@@ -38,10 +41,19 @@ function runner:update(dt)
 	end
 	--process movement(motion)
 	self.x = self.x + (self.speed*self.dir) * dt
+
+	--process life
+	if self.hp <= 0 then
+		em:remove(self)
+	end
+	self.ht:update(dt)
 end	
 
 function runner:draw()
 	love.graphics.setColor(255,255,255)
+	if self.hit then
+		love.graphics.setColor(255,0,0)
+	end
 	love.graphics.draw(self.image,self.x,self.y, 0, self.dir, 1)
 end
 
