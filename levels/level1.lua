@@ -34,6 +34,7 @@ function level1:update(dt)
 		if n >= 50 then
 			spawnMissile = true
 			spawnRunner = false
+			spawnShield = false
 		elseif n < 49 then
 			spawnRunner = true
 			spawnMissile = false
@@ -49,6 +50,10 @@ function level1:update(dt)
 			spawnRunner = false
 			local r = runner()
 			em:add(r)
+		elseif spawnShield == false then
+			spawnRunner = true
+			local sh = shield()
+			em:add(sh)
 		end
 	end
 	--check remove condition for each entity
