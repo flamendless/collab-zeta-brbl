@@ -6,7 +6,6 @@ local quads = require("src.quads")
 local bullet = require("entities/bullet")
 local bulletDirX = 0
 local bulletDirY = 0
-local shield = require("entities/shield")
 local spawned = false
 
 function player:new(x, y, speed)
@@ -21,6 +20,7 @@ function player:new(x, y, speed)
 	self.gravity = -200
 	self.tag = "Player"
 	self.death = false
+	self.mod = false
 end
 
 function player:draw()
@@ -32,7 +32,7 @@ function player:update(dt)
 	--key inputs either true or false
 	local left = love.keyboard.isDown("a")
 	local right = love.keyboard.isDown("d")
-	local jump = love.keyboard.isDown("space")
+	local jump = love.keyboard.isDown("w")
 	--input evaluations
 	if left then
 		--keep the obj inside the screen
@@ -70,13 +70,27 @@ function player:update(dt)
 		end
 		self.yvel = 0
 	end
-
+	
 	--death
 	if self.death then
 		--spawn death object	
 		if not spawned then
 			spawned = true
-			local q = quads(self.image,2,self.x,self.y)
+			local x = self.x + self.w/2
+			local y = self.y + self.h/2
+			local q = quads(self.image,2,x,y)
+			
+			--remove player object
+			em:remove(self)
+		end
+	end
+
+	if debugging then
+		if self.death then
+			if love.keyboard.isDown("p") then
+				self.death = false
+				spawned = false
+			end
 		end
 	end
 end
@@ -85,7 +99,6 @@ function player:keypressed(key)
 	local sLeft = "j"
 	local sRight = "l"
 	local sUp = "i"
-	local sShield = "q"
 
 	if key == sLeft then
 		bulletDirX = -1	
@@ -100,9 +113,6 @@ function player:keypressed(key)
 	if key == sLeft or key == sRight or key == sUp then
 		local b = bullet(self.x,self.y,bulletDirX,bulletDirY)
 		em:add(b)
-	elseif key == sShield then
-		local sh = shield(self.x,self.y)
-		em:add(sh)
 	end
 end
 
