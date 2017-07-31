@@ -1,20 +1,38 @@
 local classic = require("modules/classic/classic")
 local shield = classic:extend()
 
+
 local imgShield = love.graphics.newImage("assets/shield.png")
 imgShield:setFilter("nearest","nearest",1)
 
-function shield:new(x, y, dirX, dirY)
+function shield:new(player, x, y, radius, duration)
 	self.image = imgShield
 	self.x = x
 	self.y = y
 	self.dirX = dirX
 	self.dirY = 1
+	self.radius = radius
+	self.player = player
+	self.duration = duration
+	self.tag = "Shield"
 end
 
 function shield:draw()
 	love.graphics.setColor(255,255,255)
-	love.graphics.draw(self.image,self.x,self.y,0,self.dirX,self.dirY)
+	love.graphics.circle("line", self.x, self.y, self.radius)
 end
+
+function shield:update(dt)
+	if self.duration > 0 then
+		self.x = self.player.x + self.player.w/2 
+		self.y = self.player.y + self.player.h/2
+		self.duration = self.duration - 1 * dt
+	else
+		em:remove(self)
+		self.player.shieldOn = false
+	end
+end
+
+
 
 return shield

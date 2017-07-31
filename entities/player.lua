@@ -5,9 +5,12 @@ local quads = require("src.quads")
 local anim = require("modules.anim8.anim8")
 
 local bullet = require("entities/bullet")
+local shield = require("entities/shield")
 local bulletDirX = 0
 local bulletDirY = 0
 local spawned = false
+local shieldRegen = 25
+local shieldCost = 75
 
 local imagePlayer = love.graphics.newImage("assets/square.png")
 
@@ -38,6 +41,8 @@ function player:new(x, y, speed)
 	self.death = false
 	self.maxAmmo = 10
 	self.ammo = self.maxAmmo
+	self.shieldOn = false
+	self.shieldPower = 100
 end
 
 function player:draw()
@@ -45,8 +50,8 @@ function player:draw()
 	love.graphics.draw(self.image, self.x, self.y)
 	
 	if debugging then
-		love.graphics.print(self.ammo, 0,16)
-		love.graphics.print(self.state,0,32)
+		love.graphics.print(math.floor(self.shieldPower, 0,16))
+		--love.graphics.print(self.state,0,32)
 	end
 end
 
@@ -113,7 +118,9 @@ function player:update(dt)
 			em:remove(self)
 		end
 	end
-
+	if self.shieldPower < 100 then
+		self.shieldPower = self.shieldPower + shieldRegen * dt
+	end
 	if debugging then
 		if self.death then
 			if love.keyboard.isDown("p") then
@@ -122,6 +129,8 @@ function player:update(dt)
 			end
 		end
 	end
+
+
 end
 
 function player:keypressed(key)
@@ -129,6 +138,7 @@ function player:keypressed(key)
 	local sRight = "l"
 	local sUp = "i"
 	local reload = "r"
+	local keyShield = "q"
 	
 	--set bullet
 	if key == sLeft then
@@ -149,6 +159,15 @@ function player:keypressed(key)
 
 			self.state = states.shooting
 			self.ammo = self.ammo - 1
+		end
+	elseif key == keyShield then
+		if not self.shieldOn then
+			if self.shieldPower >= shieldCost then
+				local sh = shield(self,self.x + self.w/2,self.y + self.h/2, 8, 1)
+				em:add(sh)
+				self.shieldPower = self.shieldPower - shieldCost
+				self.shieldOn = true
+			end
 		end
 	end
 
