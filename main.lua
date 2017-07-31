@@ -1,6 +1,9 @@
 --for debugging
 --require("modules/LOVEDEBUG/lovedebug")
 
+--game defaults
+love.graphics.setDefaultFilter("nearest","nearest",1)
+
 --very important core modules
 em = require("src/entityManager")()
 lm = require("src/levelManager")()
@@ -9,7 +12,6 @@ lm = require("src/levelManager")()
 local level1 = require("levels/level1")
 
 function love.load()
-	love.graphics.setDefaultFilter("nearest","nearest",1)
 	--start at level1
 	lm:switch(level1)
 end

@@ -14,7 +14,6 @@ local c = ct(3, colors)
 --load the image when the file is required (when loaded)
 --loading the image in the :new function may result in glitch
 local imgWarning = love.graphics.newImage("assets/warning.png")
-imgWarning:setFilter("nearest","nearest",1)
 
 function warning:new(x)
 	self.image = imgWarning

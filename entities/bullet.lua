@@ -2,7 +2,6 @@ local classic = require("modules/classic/classic")
 local bullet = classic:extend()
 
 local imgBullet = love.graphics.newImage("assets/bullet.png")
-imgBullet:setFilter("nearest","nearest")
 
 function bullet:new(x,y,xdir,ydir)
 	self.img = imgBullet

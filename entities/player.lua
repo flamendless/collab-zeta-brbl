@@ -2,14 +2,30 @@ local class = require("modules/classic/classic")
 local player = class:extend()
 local particles = require("src.particles")
 local quads = require("src.quads")
+local anim = require("modules.anim8.anim8")
 
 local bullet = require("entities/bullet")
 local bulletDirX = 0
 local bulletDirY = 0
 local spawned = false
 
+local imagePlayer = love.graphics.newImage("assets/square.png")
+
+--local gIdle = anim.newGrid(size,size,imageWidth,imageHeight)
+--states.idle = anim.newAnimation(gIdle('range',1),speed)
+
+local states = {
+	idle = "idle",
+	jumping = "jumping",
+	walkingLeft = "walk left",
+	walkingRight = "walk right",
+	shooting = "shooting",
+	reloading = "reloading"
+}
+
 function player:new(x, y, speed)
-	self.image = love.graphics.newImage("assets/square.png")
+	self.state = states.idle
+	self.image = imagePlayer
 	self.x = x
 	self.y = y
 	self.w = self.image:getWidth()
@@ -20,12 +36,18 @@ function player:new(x, y, speed)
 	self.gravity = -200
 	self.tag = "Player"
 	self.death = false
-	self.mod = false
+	self.maxAmmo = 10
+	self.ammo = self.maxAmmo
 end
 
 function player:draw()
 	love.graphics.setColor(255,255,255)
 	love.graphics.draw(self.image, self.x, self.y)
+	
+	if debugging then
+		love.graphics.print(self.ammo, 0,16)
+		love.graphics.print(self.state,0,32)
+	end
 end
 
 function player:update(dt)
@@ -40,12 +62,18 @@ function player:update(dt)
 			self.x = self.x + 1 * dt
 		end
 		self.x = self.x - self.speed * dt
+		self.state = states.walkingLeft
 	elseif right then
 		--keep the obj inside the screen
 		while self.x + self.w > game.gWidth do
 			self.x = self.x - 1 * dt	
 		end
 		self.x = self.x + self.speed * dt
+		self.state = states.walkingRight
+	else
+		if self.state ~= states.jumping then
+			self.state = states.idle
+		end
 	end
 	--check if jump is pressed
 	if jump then
@@ -54,6 +82,7 @@ function player:update(dt)
 			--set yvel to jump height
 			self.yvel = self.jumpheight
 		end
+		self.state = states.jumping
 	end
 	
 	--process yvel if not on ground
@@ -99,7 +128,9 @@ function player:keypressed(key)
 	local sLeft = "j"
 	local sRight = "l"
 	local sUp = "i"
-
+	local reload = "r"
+	
+	--set bullet
 	if key == sLeft then
 		bulletDirX = -1	
 		bulletDirY = 0
@@ -111,8 +142,20 @@ function player:keypressed(key)
 		bulletDirY = -1
 	end
 	if key == sLeft or key == sRight or key == sUp then
-		local b = bullet(self.x,self.y,bulletDirX,bulletDirY)
-		em:add(b)
+		if self.ammo > 0 then
+			--fire bullet
+			local b = bullet(self.x,self.y,bulletDirX,bulletDirY)
+			em:add(b)
+
+			self.state = states.shooting
+			self.ammo = self.ammo - 1
+		end
+	end
+
+	--if no ammo, reload
+	if key == reload then
+		self.ammo = self.maxAmmo
+		self.state = states.reloading
 	end
 end
 

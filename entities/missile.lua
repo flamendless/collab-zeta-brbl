@@ -17,7 +17,6 @@ for i = 1, gridN do
 end
 
 local imgMissile = love.graphics.newImage("assets/missile.png")
-imgMissile:setFilter("nearest","nearest",1)
 
 function missile:new()
 	self.image = imgMissile

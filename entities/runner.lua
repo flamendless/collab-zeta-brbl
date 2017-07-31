@@ -10,7 +10,6 @@ local position = {-val,game.gWidth+val}
 math.randomseed(os.time())
 
 local imgRunner = love.graphics.newImage("assets/cactuar.png")
-imgRunner:setFilter("nearest","nearest",1)
 
 function runner:new()
 	self.image = imgRunner
