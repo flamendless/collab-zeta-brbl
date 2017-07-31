@@ -6,6 +6,7 @@ local anim = require("modules.anim8.anim8")
 
 local bullet = require("entities/bullet")
 local shield = require("entities/shield")
+local enemy = require("entities/enemy")
 local bulletDirX = 0
 local bulletDirY = 0
 local spawned = false
