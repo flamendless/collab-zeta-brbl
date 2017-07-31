@@ -112,7 +112,7 @@ function player:update(dt)
 			spawned = true
 			local x = self.x + self.w/2
 			local y = self.y + self.h/2
-			local q = quads(self.image,2,x,y)
+			local q = quads(self.image,1,x,y)
 			
 			--remove player object
 			em:remove(self)
