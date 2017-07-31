@@ -5,6 +5,7 @@ local level1 = classic:extend()
 local player = require("entities/player")
 local missile = require("entities/missile")
 local runner = require("entities/runner")
+local enemy = require("entities/enemy")
 
 --declare player positions
 local playerx = game.gWidth/2
@@ -13,13 +14,16 @@ local playery = game.gHeight
 --for missile and runner events
 local spawnMissile = false
 local spawnRunner = false
+local spawnEnemy = true
 local numMissiles = 3
 local timerEvent = 0
 
 function level1:load()
 	--instantitiate the player
 	player1 = player(playerx, playery, 100)
+	enemy1 = enemy(0,0,50)
 	em:add(player1)
+	em:add(enemy1)
 end
 
 function level1:update(dt)
