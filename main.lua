@@ -35,7 +35,7 @@ function love.draw()
 	if debugging then
 		love.graphics.setColor(255,0,0)
 		love.graphics.rectangle("line",0,0,game.gWidth,game.gHeight)
-		love.graphics.print(love.timer.getFPS())
+		--love.graphics.print(love.timer.getFPS())
 	end
 	lm:draw()	
 

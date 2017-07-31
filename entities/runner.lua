@@ -1,10 +1,12 @@
 local class = require("modules/classic/classic")
 local runner = class:extend()
 local ht = require("src/hitTimer")
+local warning = require("entities/warning")
 
 --set starting possible spawn positions
 local val = 256
 local position = {-val,game.gWidth+val}
+
 
 --randomize seed
 math.randomseed(os.time())
@@ -28,7 +30,19 @@ function runner:new()
 	else
 		self.dir = -1
 	end
+	self.origX = self.x
 	self.tag = "Runner"
+
+	--warning
+	local wx
+	local wy = game.gHeight - 12
+	if self.x == position[1] then
+		wx = 0
+	elseif self.x == position[2] then
+		wx = game.gWidth
+	end
+	self.warning = warning(wx,wy)
+	em:add(self.warning)
 end
 
 function runner:update(dt)
@@ -57,6 +71,15 @@ function runner:draw()
 end
 
 function runner:onRemoveCondition()
+	if self.origX == position[1] then
+		if self.x >= 0 then
+			self.warning.remove = true
+		end
+	elseif self.origX == position[2] then
+		if self.x <= game.gWidth then
+			self.warning.remove = true
+		end
+	end
 	return self.x < -512 or self.x > game.gWidth + 512
 end
 

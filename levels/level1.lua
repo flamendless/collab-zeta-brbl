@@ -50,10 +50,6 @@ function level1:update(dt)
 			spawnRunner = false
 			local r = runner()
 			em:add(r)
-		elseif spawnShield == false then
-			spawnRunner = true
-			local sh = shield()
-			em:add(sh)
 		end
 	end
 	--check remove condition for each entity

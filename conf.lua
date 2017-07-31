@@ -1,18 +1,8 @@
 function love.conf(t)
-	t.window.title = "Collab"
-	t.window.width = 1080
-	t.window.height = 720
-
-	--print to console in real time
-	io.stdout:setvbuf("no")
-	
-	--for debugging tests
-	debugging = true
-
 	--defaults
 	game = {}
-	game.wWidth = 1080
-	game.wHeight = 720
+	game.wWidth = 640
+	game.wHeight = 640
 	--game.gWidth = 1080/5
 	--game.gHeight = 720/5
 	game.gWidth = 64
@@ -21,4 +11,15 @@ function love.conf(t)
 		(game.wWidth/game.gWidth),
 		(game.wHeight/game.gHeight))
 	game.scale = true
+
+	t.window.title = "Collab"
+	t.window.width = game.wWidth
+	t.window.height = game.wHeight
+
+	--print to console in real time
+	io.stdout:setvbuf("no")
+	
+	--for debugging tests
+	debugging = true
+
 end
