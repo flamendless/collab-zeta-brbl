@@ -17,7 +17,7 @@ function runner:new()
 	self.image = imgRunner
 	self.x = position[math.floor(math.random(1,#position))]
 	self.y = game.gHeight
-	self.speed = 100
+	self.speed = 75
 	self.w = self.image:getWidth()
 	self.h = self.image:getHeight()	
 	self.dir = 1
@@ -37,9 +37,9 @@ function runner:new()
 	local wx
 	local wy = game.gHeight - 12
 	if self.x == position[1] then
-		wx = 0
+		wx = 4
 	elseif self.x == position[2] then
-		wx = game.gWidth
+		wx = game.gWidth - 6
 	end
 	self.warning = warning(wx,wy)
 	em:add(self.warning)

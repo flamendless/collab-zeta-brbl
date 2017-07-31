@@ -26,23 +26,26 @@ function warning:new(x,y)
 	self.remove = false
 end
 
+local spd = 1
+local dir = 1
+local max = 1
+local min = 0.5
+
 function warning:update(dt)
 	c:update(dt)
-
-	if self.size < 1 then
-		self.size = self.size + 0.1 * dt
-		if self.size >= 1 then
-			em:remove(self)
-		end
+	if self.size >= max then
+		dir = -1
+	elseif self.size <= min then
+		dir = 1
 	end
+	self.size = self.size + (dir * spd) * dt
 end
 
 function warning:draw()
 	love.graphics.setColor(c:get())
 	love.graphics.draw(self.image,
-		self.x + self.w/2,
-		self.y, self.rot,
-		self.size,self.size,
+		self.x, self.y, self.rot,
+		self.size, self.size,
 		(self.w * self.size)/2,
 		(self.h * self.size)/2)
 end

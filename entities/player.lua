@@ -43,6 +43,7 @@ function player:new(x, y, speed)
 	self.ammo = self.maxAmmo
 	self.shieldOn = false
 	self.shieldPower = 100
+	self.shield = nil
 end
 
 function player:draw()
@@ -50,7 +51,7 @@ function player:draw()
 	love.graphics.draw(self.image, self.x, self.y)
 	
 	if debugging then
-		love.graphics.print(math.floor(self.shieldPower, 0,16))
+		--love.graphics.print(math.floor(self.shieldPower, 0,16))
 		--love.graphics.print(self.state,0,32)
 	end
 end
@@ -107,6 +108,8 @@ function player:update(dt)
 	
 	--death
 	if self.death then
+		--remove shield
+		em:remove(self.shield)
 		--spawn death object	
 		if not spawned then
 			spawned = true
@@ -129,8 +132,6 @@ function player:update(dt)
 			end
 		end
 	end
-
-
 end
 
 function player:keypressed(key)
@@ -163,8 +164,8 @@ function player:keypressed(key)
 	elseif key == keyShield then
 		if not self.shieldOn then
 			if self.shieldPower >= shieldCost then
-				local sh = shield(self,self.x + self.w/2,self.y + self.h/2, 8, 1)
-				em:add(sh)
+				self.shield = shield(self,self.x + self.w/2,self.y + self.h/2, 8, 10)
+				em:add(self.shield)
 				self.shieldPower = self.shieldPower - shieldCost
 				self.shieldOn = true
 			end

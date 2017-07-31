@@ -22,12 +22,13 @@ function missile:new()
 	self.image = imgMissile
 	
 	--random grid position
-	self.x = grid[math.floor(math.random(#grid))]
+	self.g = math.floor(math.random(1,#grid))
+	self.x = grid[self.g]
 	self.h = self.image:getHeight()
 	self.w = self.image:getWidth()
 	--start at above the visible screen
 	self.y = -self.h * 2
-	self.speed = math.random(100,200)
+	self.speed = math.random(50,100)
 	self.tag = "Missile"
 
 	--missile stats
@@ -62,9 +63,6 @@ function missile:update(dt)
 	if self.y + self.h then
 		self.y = self.y + self.speed * dt
 	end
-
-	--process warning position
-	self.warning.x = self.x - self.w/2
 	
 	--check hp
 	if self.hp <= 0 then

@@ -15,6 +15,7 @@ function love.conf(t)
 	t.window.title = "Collab"
 	t.window.width = game.wWidth
 	t.window.height = game.wHeight
+	t.console = true
 
 	--print to console in real time
 	io.stdout:setvbuf("no")
