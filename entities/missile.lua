@@ -35,6 +35,7 @@ function missile:new()
 	self.hp = 100
 	self.hit = false
 	self.ht = ht(self,0.25)
+	
 	--create a warning sign
 	self.warning = warning(self.x)
 	em:add(self.warning)

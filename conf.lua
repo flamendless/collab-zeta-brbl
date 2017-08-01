@@ -1,8 +1,8 @@
 function love.conf(t)
 	--defaults
 	game = {}
-	game.wWidth = 1080
-	game.wHeight = 720
+	game.wWidth = 640
+	game.wHeight = 640
 	--game.gWidth = 1080/5
 	--game.gHeight = 720/5
 	game.gWidth = 64
