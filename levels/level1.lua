@@ -20,7 +20,7 @@ local timerEvent = 0
 
 function level1:load()
 	--instantitiate the player
-	player1 = player(playerx, playery, 100)
+	player1 = player(playerx, playery)
 	enemy1 = enemy(0,0,50)
 	em:add(player1)
 	em:add(enemy1)

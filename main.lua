@@ -23,6 +23,7 @@ end
 
 function love.draw()
 	--set the screen to scale (zoom)
+	love.graphics.setBackgroundColor(190,80,180)
 	love.graphics.push()
 	if not game.scale then
 		love.graphics.translate(game.wWidth/2, game.wHeight/2)

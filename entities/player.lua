@@ -13,28 +13,34 @@ local spawned = false
 local shieldRegen = 25
 local shieldCost = 75
 
-local imagePlayer = love.graphics.newImage("assets/square.png")
+--local imgIdle = love.graphics.newImage("assets/sheets/player-idle.png")
+--local imgWalk = love.graphics.newImage("assets/sheets/player-walk.png")
+local imgPlayer = love.graphics.newImage("assets/sheets/player-sheet.png")
 
 --local gIdle = anim.newGrid(size,size,imageWidth,imageHeight)
 --states.idle = anim.newAnimation(gIdle('range',1),speed)
+local gIdle = anim.newGrid(6,9,imgPlayer:getWidth(),imgPlayer:getHeight())
+local gJump = anim.newGrid(6,9,imgPlayer:getWidth(),imgPlayer:getHeight(),0,9)
+local gWalk = anim.newGrid(6,9,imgPlayer:getWidth(),imgPlayer:getHeight(),0,18)
 
-local states = {
-	idle = "idle",
-	jumping = "jumping",
-	walkingLeft = "walk left",
-	walkingRight = "walk right",
-	shooting = "shooting",
-	reloading = "reloading"
-}
+local states = {}
+states.idle = anim.newAnimation(gIdle('1-2',1),0.5)
+states.jumping = anim.newAnimation(gJump('1-3',1),0.3, function()
+		states.jumping:pause()
+	end)
+states.walkingRight = anim.newAnimation(gWalk('1-4',1),0.2)
+states.walkingLeft = anim.newAnimation(gWalk('1-4',1),0.2):flipH()
+states.shooting = "shooting"
+states.reloading = "reloading"
 
-function player:new(x, y, speed)
+function player:new(x, y)
+	self.image = imgPlayer
 	self.state = states.idle
-	self.image = imagePlayer
 	self.x = x
 	self.y = y
-	self.w = self.image:getWidth()
-	self.h = self.image:getHeight()
-	self.speed = speed
+	self.w = 6
+	self.h = 9
+	self.speed = 50
 	self.yvel = 0
 	self.jumpheight = -100
 	self.gravity = -200
@@ -49,15 +55,16 @@ end
 
 function player:draw()
 	love.graphics.setColor(255,255,255)
-	love.graphics.draw(self.image, self.x, self.y)
+	--love.graphics.draw(self.image, self.x, self.y)
+	self.state:draw(self.image,self.x,self.y)
 	
 	if debugging then
-		--love.graphics.print(math.floor(self.shieldPower, 0,16))
-		--love.graphics.print(self.state,0,32)
+		--love.graphics.print(math.floor(self.shieldPower, 0,16)
 	end
 end
 
 function player:update(dt)
+	self.state:update(dt)
 	--key inputs either true or false
 	local left = love.keyboard.isDown("a")
 	local right = love.keyboard.isDown("d")
@@ -89,6 +96,9 @@ function player:update(dt)
 			--set yvel to jump height
 			self.yvel = self.jumpheight
 		end
+		if self.state ~= states.jumping then
+			states.jumping:resume()
+		end
 		self.state = states.jumping
 	end
 	
@@ -105,6 +115,7 @@ function player:update(dt)
 			self.y = self.y - 1 * dt
 		end
 		self.yvel = 0
+		self.state = states.idle
 	end
 	
 	--death
@@ -116,7 +127,7 @@ function player:update(dt)
 			spawned = true
 			local x = self.x + self.w/2
 			local y = self.y + self.h/2
-			local q = quads(self.image,1,x,y)
+			local q = quads(self.image,4,x,y)
 			
 			--remove player object
 			em:remove(self)
