@@ -22,5 +22,5 @@ function love.conf(t)
 	
 	--for debugging tests
 	debugging = true
-
+	debug_gameBorder = false
 end

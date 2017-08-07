@@ -1,8 +1,11 @@
-local class = require("modules/classic/classic")
+local class = require("modules.classic.classic")
 local player = class:extend()
 local particles = require("src.particles")
 local quads = require("src.quads")
 local anim = require("modules.anim8.anim8")
+
+local guiBullets = require("gui.gBullets")()
+gui:add(guiBullets)
 
 local bullet = require("entities/bullet")
 local shield = require("entities/shield")
@@ -13,12 +16,8 @@ local spawned = false
 local shieldRegen = 25
 local shieldCost = 75
 
---local imgIdle = love.graphics.newImage("assets/sheets/player-idle.png")
---local imgWalk = love.graphics.newImage("assets/sheets/player-walk.png")
 local imgPlayer = love.graphics.newImage("assets/sheets/player-sheet.png")
 
---local gIdle = anim.newGrid(size,size,imageWidth,imageHeight)
---states.idle = anim.newAnimation(gIdle('range',1),speed)
 local gIdle = anim.newGrid(6,9,imgPlayer:getWidth(),imgPlayer:getHeight())
 local gJump = anim.newGrid(6,9,imgPlayer:getWidth(),imgPlayer:getHeight(),0,9)
 local gWalk = anim.newGrid(6,9,imgPlayer:getWidth(),imgPlayer:getHeight(),0,18)
@@ -30,8 +29,6 @@ states.jumping = anim.newAnimation(gJump('1-3',1),0.3, function()
 	end)
 states.walkingRight = anim.newAnimation(gWalk('1-4',1),0.2)
 states.walkingLeft = anim.newAnimation(gWalk('1-4',1),0.2):flipH()
-states.shooting = "shooting"
-states.reloading = "reloading"
 
 function player:new(x, y)
 	self.image = imgPlayer
@@ -46,7 +43,7 @@ function player:new(x, y)
 	self.gravity = -200
 	self.tag = "Player"
 	self.death = false
-	self.maxAmmo = 10
+	self.maxAmmo = 15
 	self.ammo = self.maxAmmo
 	self.shieldOn = false
 	self.shieldPower = 100
@@ -64,6 +61,7 @@ function player:draw()
 end
 
 function player:update(dt)
+	guiBullets:setBullets(self.ammo)
 	self.state:update(dt)
 	--key inputs either true or false
 	local left = love.keyboard.isDown("a")
@@ -170,7 +168,6 @@ function player:keypressed(key)
 			local b = bullet(self.x,self.y,bulletDirX,bulletDirY)
 			em:add(b)
 
-			self.state = states.shooting
 			self.ammo = self.ammo - 1
 		end
 	elseif key == keyShield then
@@ -187,7 +184,6 @@ function player:keypressed(key)
 	--if no ammo, reload
 	if key == reload then
 		self.ammo = self.maxAmmo
-		self.state = states.reloading
 	end
 end
 

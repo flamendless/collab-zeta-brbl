@@ -23,6 +23,7 @@ function runner:new()
 	self.dir = 1
 	self.hp = 100
 	self.hit = false
+	self.hitColor = {255,255,255}
 	self.ht = ht(self,0.25)
 	--check where facing
 	if self.x == position[1] then
@@ -65,7 +66,7 @@ end
 function runner:draw()
 	love.graphics.setColor(255,255,255)
 	if self.hit then
-		love.graphics.setColor(255,0,0)
+		love.graphics.setColor(self.hitColor)
 	end
 	love.graphics.draw(self.image,self.x,self.y, 0, self.dir, 1)
 end

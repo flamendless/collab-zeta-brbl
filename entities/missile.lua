@@ -35,7 +35,7 @@ function missile:new()
 	self.hp = 100
 	self.hit = false
 	self.ht = ht(self,0.25)
-	
+	self.hitColor = {255,255,255}
 	--create a warning sign
 	self.warning = warning(self.x)
 	em:add(self.warning)
@@ -77,7 +77,7 @@ end
 function missile:draw()
 	love.graphics.setColor(255,255,255)
 	if self.hit then
-		love.graphics.setColor(255,0,0)
+		love.graphics.setColor(self.hitColor)
 	end
 	love.graphics.draw(self.image, self.x, self.y)
 

@@ -7,7 +7,14 @@ function ht:new(obj,max)
 	self.timer = self.timerMax
 end
 
+function ht:custom()
+
+end
+
 function ht:update(dt)
+
+	self:custom()
+
 	if self.obj.hit then
 		self.timer = self.timer - 1 * dt
 		if self.timer <= 0 then

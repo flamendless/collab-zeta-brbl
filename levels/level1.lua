@@ -14,7 +14,6 @@ local playery = game.gHeight
 --for missile and runner events
 local spawnMissile = false
 local spawnRunner = false
-local spawnEnemy = true
 local numMissiles = 3
 local timerEvent = 0
 
