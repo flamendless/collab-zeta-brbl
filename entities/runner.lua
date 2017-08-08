@@ -13,6 +13,8 @@ math.randomseed(os.time())
 
 local imgRunner = love.graphics.newImage("assets/cactuar.png")
 
+local groundY = game.gHeight - 8
+
 function runner:new()
 	self.image = imgRunner
 	self.x = position[math.floor(math.random(1,#position))]
@@ -48,8 +50,8 @@ end
 
 function runner:update(dt)
 	--keep the obj inside the screen(above the ground)
-	if self.y + self.h > game.gHeight then
-		while self.y + self.h > game.gHeight do
+	if self.y + self.h > groundY then
+		while self.y + self.h > groundY do
 			self.y = self.y - 1 * dt
 		end
 	end

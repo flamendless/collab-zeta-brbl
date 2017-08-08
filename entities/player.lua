@@ -5,7 +5,9 @@ local quads = require("src.quads")
 local anim = require("modules.anim8.anim8")
 
 local guiBullets = require("gui.gBullets")()
+local guiMana = require("gui.gMana")()
 gui:add(guiBullets)
+gui:add(guiMana)
 
 local bullet = require("entities/bullet")
 local shield = require("entities/shield")
@@ -29,6 +31,8 @@ states.jumping = anim.newAnimation(gJump('1-3',1),0.3, function()
 	end)
 states.walkingRight = anim.newAnimation(gWalk('1-4',1),0.2)
 states.walkingLeft = anim.newAnimation(gWalk('1-4',1),0.2):flipH()
+
+local groundY = game.gHeight - 8
 
 function player:new(x, y)
 	self.image = imgPlayer
@@ -62,6 +66,7 @@ end
 
 function player:update(dt)
 	guiBullets:setBullets(self.ammo)
+	guiMana:setMana(self.shieldPower)
 	self.state:update(dt)
 	--key inputs either true or false
 	local left = love.keyboard.isDown("a")
@@ -108,8 +113,8 @@ function player:update(dt)
 		self.yvel = self.yvel - self.gravity * dt
 	end
 	--keep the player inside the screen, vertical-wise
-	if self.y + self.h > game.gHeight then
-		while self.y + self.h > game.gHeight do
+	if self.y + self.h > groundY then
+		while self.y + self.h > groundY do
 			self.y = self.y - 1 * dt
 		end
 		self.yvel = 0
@@ -150,7 +155,7 @@ function player:keypressed(key)
 	local sUp = "i"
 	local reload = "r"
 	local keyShield = "q"
-	
+
 	--set bullet
 	if key == sLeft then
 		bulletDirX = -1	
@@ -165,7 +170,21 @@ function player:keypressed(key)
 	if key == sLeft or key == sRight or key == sUp then
 		if self.ammo > 0 then
 			--fire bullet
-			local b = bullet(self.x,self.y,bulletDirX,bulletDirY)
+			local bx = self.x
+			local by = self.y
+			if bulletDirX == -1 then
+				bx = self.x - 2
+			elseif bulletDirX == 1 then
+				bx = self.x + 8
+			elseif bulletDirX == 0 then
+				bx = self.x + 3
+			end
+			if bulletDirY == -1 then
+				by = self.y - 3
+			else
+				by = self.y + 3
+			end
+			local b = bullet(bx,by,bulletDirX,bulletDirY)
 			em:add(b)
 
 			self.ammo = self.ammo - 1
@@ -173,7 +192,7 @@ function player:keypressed(key)
 	elseif key == keyShield then
 		if not self.shieldOn then
 			if self.shieldPower >= shieldCost then
-				self.shield = shield(self,self.x + self.w/2,self.y + self.h/2, 8, 10)
+				self.shield = shield(self,self.x + self.w/2,self.y + self.h/2,3)
 				em:add(self.shield)
 				self.shieldPower = self.shieldPower - shieldCost
 				self.shieldOn = true

@@ -1,13 +1,12 @@
 local class = require("modules/classic/classic")
 local ground = class:extend()
 
-function ground:new(x, y, width, height)
-	self.x = x 
-	self.y = y 
-	self.width = width 
-	self.height = height 
+function ground:new()
+	self.x = 0
+	self.y = game.gHeight - 8
+	self.width = game.gWidth
+	self.height = 8
 	self.tag = "Ground"
-
 end
 
 function ground:draw()
@@ -16,10 +15,6 @@ function ground:draw()
 end
 
 function ground:update(dt)
-	local player = em:getEntity("Player")
-	if player.y + player.h > self.y then
-		player.onGround = true
-	else player.onGround = false end
 end
 
 return ground

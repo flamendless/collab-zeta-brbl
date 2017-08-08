@@ -6,6 +6,7 @@ local player = require("entities/player")
 local missile = require("entities/missile")
 local runner = require("entities/runner")
 local enemy = require("entities/enemy")
+local ground = require("entities/ground")
 
 --declare player positions
 local playerx = game.gWidth/2
@@ -21,8 +22,10 @@ function level1:load()
 	--instantitiate the player
 	player1 = player(playerx, playery)
 	enemy1 = enemy(0,0,50)
+	ground1 = ground()
 	em:add(player1)
 	em:add(enemy1)
+	em:add(ground1)
 end
 
 function level1:update(dt)

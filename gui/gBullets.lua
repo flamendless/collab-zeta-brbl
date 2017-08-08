@@ -14,6 +14,7 @@ function guiBullets:new()
 	self.number = 10
 	self.image = imgGUI
 	self.w, self.h = self.image:getDimensions()
+	self.y = game.gHeight - self.h - 1
 end
 
 function guiBullets:update(dt)
@@ -26,10 +27,9 @@ end
 
 function guiBullets:draw()
 	love.graphics.setColor(255,255,255)
-	
 	if self.number ~= 0 then
 		for i = 1, self.number do
-			love.graphics.draw(self.image, i * offset, 1,
+			love.graphics.draw(self.image, i * offset, self.y,
 				0,1,1,
 				self.w/2)
 		end
