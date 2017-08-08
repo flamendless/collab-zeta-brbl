@@ -32,7 +32,9 @@ end
 
 function level1:update(dt)
 	em:update(dt) --update all entities
-	
+	if not global.playerDeath then
+		gui:update(dt)
+	end
 	--process the events
 	timerEvent = timerEvent + 1 * dt
 	if timerEvent >= 3 then
@@ -72,6 +74,9 @@ function level1:draw()
 	love.graphics.setColor(255,255,255)
 	love.graphics.draw(imgBG,0,0)
 	em:draw()
+	if not global.playerDeath then
+		gui:draw()
+	end
 end
 
 function level1:keypressed(key)

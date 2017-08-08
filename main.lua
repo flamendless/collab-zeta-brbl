@@ -10,7 +10,9 @@ lm = require("src/levelManager")()
 gui = require("src/guiManager")()
 
 --require levels
-local level1 = require("levels/level1")
+menu = require("levels/menu")
+credits = require("levels/credits")
+level1 = require("levels/level1")
 
 local sx,sy = 0,0
 local shakeForceMax = 50
@@ -18,8 +20,8 @@ local shakeForce = shakeForceMax
 local shakeDecrease = 25
 
 function love.load()
-	--start at level1
-	lm:switch(level1)
+	--start at menu
+	lm:switch(menu)
 end
 
 function love.update(dt)
@@ -34,10 +36,6 @@ function love.update(dt)
 
 	--update current level
 	lm:update(dt)
-
-	if not global.playerDeath then
-		gui:update(dt)
-	end
 end
 
 function love.draw()
@@ -56,16 +54,11 @@ function love.draw()
 	
 	lm:draw()	
 
-	if not global.playerDeath then
-		gui:draw()
-	end
-
 	love.graphics.pop()
 end
 
 function love.keypressed(key)
 	lm:keypressed(key)
-	gui:keypressed(key)
 
 	if debugging then
 		if key == "o" then
@@ -76,5 +69,4 @@ end
 
 function love.keyreleased(key)
 	lm:keyreleased(key)
-	gui:keyreleased(key)
 end

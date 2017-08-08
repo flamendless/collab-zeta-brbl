@@ -3,8 +3,13 @@ local enemy = classic:extend()
 local imgEnemy = love.graphics.newImage("assets/ship.png")
 local ht = require("src/hitTimer")
 
-local val = 256
-local position = {-val,game.gWidth+val}
+--set up table for enemy possible events macro
+local enemyEvents = {
+	"hide",
+	"Left_to_Right",
+	"Right_to_left",
+	"Top_to_Bottom"
+}
 
 function enemy:new(x,y,speed)
 	self.image = imgEnemy
@@ -32,12 +37,6 @@ end
 
 function enemy:update(dt)
 	self.ht:update(dt)
-	if self.x + self.w > game.gWidth then
-		self.dir = -1
-	elseif self.x < 0 then
-		self.dir = 1
-	end
-	self.x = self.x + self.speed * self.dir * dt 
 end
 
 function enemy:onCollision(object)
