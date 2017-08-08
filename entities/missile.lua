@@ -60,6 +60,9 @@ end
 
 function missile:update(dt)
 	self:checkOverlap(dt)
+
+	self.warning.x = self.x
+
 	--move the missile downwards
 	if self.y + self.h then
 		self.y = self.y + self.speed * dt
@@ -69,6 +72,8 @@ function missile:update(dt)
 	if self.hp <= 0 then
 		self.warning.remove = true
 		em:remove(self)
+
+		global.shake = true
 	end
 	--hit timer
 	self.ht:update(dt)
@@ -80,14 +85,6 @@ function missile:draw()
 		love.graphics.setColor(self.hitColor)
 	end
 	love.graphics.draw(self.image, self.x, self.y)
-
-	--debugging: draw the grid lines
-	if debugging then
-		love.graphics.setColor(255,0,0)
-		for i = 1, #grid do
-			love.graphics.line(i*gridW,0,i*gridW,game.gHeight)
-		end
-	end
 end
 
 function missile:onCollision(object)

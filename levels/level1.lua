@@ -18,6 +18,8 @@ local spawnRunner = false
 local numMissiles = 3
 local timerEvent = 0
 
+local imgBG = love.graphics.newImage("assets/bg.png")
+
 function level1:load()
 	--instantitiate the player
 	player1 = player(playerx, playery)
@@ -67,6 +69,8 @@ end
 
 function level1:draw()
 	--draw all entities
+	love.graphics.setColor(255,255,255)
+	love.graphics.draw(imgBG,0,0)
 	em:draw()
 end
 

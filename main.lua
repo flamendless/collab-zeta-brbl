@@ -12,15 +12,32 @@ gui = require("src/guiManager")()
 --require levels
 local level1 = require("levels/level1")
 
+local sx,sy = 0,0
+local shakeForceMax = 50
+local shakeForce = shakeForceMax
+local shakeDecrease = 25
+
 function love.load()
 	--start at level1
 	lm:switch(level1)
 end
 
 function love.update(dt)
+	if global.shake then
+		sx = (math.random()-.5) * shakeForce
+		sy = (math.random()-.5) * shakeForce
+
+		if shakeForce > 0 then
+			shakeForce = shakeForce - shakeDecrease * dt
+		end
+	end
+
 	--update current level
 	lm:update(dt)
-	gui:update(dt)
+
+	if not global.playerDeath then
+		gui:update(dt)
+	end
 end
 
 function love.draw()
@@ -30,20 +47,18 @@ function love.draw()
 	if not game.scale then
 		love.graphics.translate(game.wWidth/2, game.wHeight/2)
 	else
+		if global.shake then
+			love.graphics.translate(sx,sy)
+		end
 		love.graphics.scale(game.ratio, game.ratio)
 	end
 	love.graphics.setColor(255,255,255)
 	
-	--debugging: gWidth,gHeight window borders and FPS
-	if debugging then
-		love.graphics.setColor(255,0,0)
-		if debug_gameBorder then
-			love.graphics.rectangle("line",0,0,game.gWidth,game.gHeight)
-		end
-		--love.graphics.print(love.timer.getFPS())
-	end
 	lm:draw()	
-	gui:draw()
+
+	if not global.playerDeath then
+		gui:draw()
+	end
 
 	love.graphics.pop()
 end

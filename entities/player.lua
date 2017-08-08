@@ -32,8 +32,6 @@ states.jumping = anim.newAnimation(gJump('1-3',1),0.3, function()
 states.walkingRight = anim.newAnimation(gWalk('1-4',1),0.2)
 states.walkingLeft = anim.newAnimation(gWalk('1-4',1),0.2):flipH()
 
-local groundY = game.gHeight - 8
-
 function player:new(x, y)
 	self.image = imgPlayer
 	self.state = states.idle
@@ -113,8 +111,8 @@ function player:update(dt)
 		self.yvel = self.yvel - self.gravity * dt
 	end
 	--keep the player inside the screen, vertical-wise
-	if self.y + self.h > groundY then
-		while self.y + self.h > groundY do
+	if self.y + self.h > global.groundY then
+		while self.y + self.h > global.groundY do
 			self.y = self.y - 1 * dt
 		end
 		self.yvel = 0
@@ -134,18 +132,11 @@ function player:update(dt)
 			
 			--remove player object
 			em:remove(self)
+			global.playerDeath = true
 		end
 	end
 	if self.shieldPower < 100 then
 		self.shieldPower = self.shieldPower + shieldRegen * dt
-	end
-	if debugging then
-		if self.death then
-			if love.keyboard.isDown("p") then
-				self.death = false
-				spawned = false
-			end
-		end
 	end
 end
 
@@ -210,7 +201,13 @@ function player:onCollision(object)
 	local objTag = object.tag
 	if objTag == "Missile" or
 		objTag == "Runner" then
-		self.death = true
+
+		if self.shieldOn then
+			object.hp = 0
+			global.shake = true
+		else
+			self.death = true
+		end
 	end
 end
 

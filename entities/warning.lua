@@ -19,7 +19,7 @@ function warning:new(x,y)
 	self.image = imgWarning
 	self.w, self.h = self.image:getDimensions()
 	self.x = x
-	self.y = y or 0
+	self.y = y or 8
 	self.size = 0.5
 	self.rot = 0
 	self.tag = "Warning"

@@ -35,7 +35,7 @@ function guiBullets:draw()
 		end
 	else
 		if appear then
-			love.graphics.draw(imgReload,2,2)
+			love.graphics.draw(imgReload,0,0)
 		end
 	end
 end

@@ -1,27 +1,27 @@
-local class = require("modules/classic/classic")
+local class = require("modules.classic.classic")
 local runner = class:extend()
 local ht = require("src/hitTimer")
 local warning = require("entities/warning")
+local anim = require("modules.anim8.anim8")
 
 --set starting possible spawn positions
 local val = 256
 local position = {-val,game.gWidth+val}
 
-
 --randomize seed
 math.randomseed(os.time())
 
-local imgRunner = love.graphics.newImage("assets/cactuar.png")
-
-local groundY = game.gHeight - 8
+local imgRunner = love.graphics.newImage("assets/runner/runner-sheet.png")
+local gRunner = anim.newGrid(8,8,imgRunner:getDimensions())
+local animRunner = anim.newAnimation(gRunner('1-3',1),0.2)
 
 function runner:new()
 	self.image = imgRunner
 	self.x = position[math.floor(math.random(1,#position))]
 	self.y = game.gHeight
 	self.speed = 75
-	self.w = self.image:getWidth()
-	self.h = self.image:getHeight()	
+	self.w = 8
+	self.h = 8
 	self.dir = 1
 	self.hp = 100
 	self.hit = false
@@ -49,9 +49,10 @@ function runner:new()
 end
 
 function runner:update(dt)
+	animRunner:update(dt)
 	--keep the obj inside the screen(above the ground)
-	if self.y + self.h > groundY then
-		while self.y + self.h > groundY do
+	if self.y + self.h > global.groundY then
+		while self.y + self.h > global.groundY do
 			self.y = self.y - 1 * dt
 		end
 	end
@@ -70,7 +71,8 @@ function runner:draw()
 	if self.hit then
 		love.graphics.setColor(self.hitColor)
 	end
-	love.graphics.draw(self.image,self.x,self.y, 0, self.dir, 1)
+	--love.graphics.draw(self.image,self.x,self.y, 0, self.dir, 1)
+	animRunner:draw(self.image,self.x,self.y,0,self.dir,1)
 end
 
 function runner:onRemoveCondition()

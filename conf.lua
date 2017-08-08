@@ -20,6 +20,12 @@ function love.conf(t)
 	--print to console in real time
 	io.stdout:setvbuf("no")
 	
+	--set up globals/macro
+	global = {}
+	global.playerDeath = false
+	global.groundY = game.gHeight - 12
+	global.shake = false
+
 	--for debugging tests
 	debugging = true
 	debug_gameBorder = false

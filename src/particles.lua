@@ -30,8 +30,8 @@ function p:update(dt)
 		self.y = self.y + self.yvel * dt
 		self.yvel = self.yvel - self.gravity * dt
 	end
-	if self.y + self.size > game.gHeight then
-		while self.y + self.size > game.gHeight do
+	if self.y + self.size > global.groundY then
+		while self.y + self.size > global.groundY do
 			self.y = self.y - 1 * dt
 		end
 		self.yvel = 0
