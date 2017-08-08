@@ -3,6 +3,7 @@ local runner = class:extend()
 local ht = require("src/hitTimer")
 local warning = require("entities/warning")
 local anim = require("modules.anim8.anim8")
+local explode = require("entities.explode")
 
 --set starting possible spawn positions
 local val = 256
@@ -61,6 +62,10 @@ function runner:update(dt)
 
 	--process life
 	if self.hp <= 0 then
+		--effect
+		local e = explode(self.x,self.y)
+		em:add(e)
+
 		em:remove(self)
 	end
 	self.ht:update(dt)

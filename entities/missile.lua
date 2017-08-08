@@ -28,7 +28,7 @@ function missile:new()
 	self.w = self.image:getWidth()
 	--start at above the visible screen
 	self.y = -self.h * 2
-	self.speed = math.random(50,100)
+	self.speed = math.random(25,75)
 	self.tag = "Missile"
 
 	--missile stats
