@@ -25,6 +25,7 @@ function love.conf(t)
 	global.playerDeath = false
 	global.groundY = game.gHeight - 12
 	global.shake = false
+	global.done = false
 
 	--for debugging tests
 	debugging = true

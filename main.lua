@@ -32,6 +32,15 @@ function love.update(dt)
 		if shakeForce > 0 then
 			shakeForce = shakeForce - shakeDecrease * dt
 		end
+		if shakeForce <= 0 then
+			if global.done then
+				success = love.window.showMessageBox("Too Bad",
+					"You let the enemy crash into the earth. The crash created a massive crater and a deadly virus spreaded out.",
+					"info",
+					true)
+				love.event.quit()
+			end
+		end
 	end
 
 	--update current level

@@ -20,7 +20,7 @@ function runner:new()
 	self.image = imgRunner
 	self.x = position[math.floor(math.random(1,#position))]
 	self.y = game.gHeight
-	self.speed = 75
+	self.speed = 50
 	self.w = 8
 	self.h = 8
 	self.dir = 1

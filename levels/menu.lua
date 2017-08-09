@@ -1,7 +1,13 @@
 local classic = require("modules.classic.classic")
 local menu = classic:extend()
+local anim = require("modules.anim8.anim8")
 
---local imgBG = love.graphics.newImage("assets/menuBG.png")
+local imgBG = love.graphics.newImage("assets/menuBG.png")
+local imgShip = love.graphics.newImage("assets/ship-sheet.png")
+
+local gShip = anim.newGrid(8,8,imgShip:getDimensions())
+local animShip = anim.newAnimation(gShip('1-4',1),0.4)
+
 local font = love.graphics.newFont("assets/Doogle.TTF",8)
 local list = {
 	"START",
@@ -23,6 +29,10 @@ local onEnterList = {
 	end
 }
 local cursor = 1
+local sx,sy = 0, game.gHeight - 8
+local speed = 1
+
+local earthDestroy = false
 
 function menu:new()
 
@@ -33,14 +43,26 @@ function menu:load()
 end
 
 function menu:update(dt)
-
+	animShip:update(dt)
+	if sx < 36 then
+		sx = sx + speed * dt
+	end
+	if sy > 20 then
+		sy = sy - speed * dt
+	end
+	if sx >= 36 and sy <= 20 then
+		earthDestroy = true
+		global.shake = true
+		global.done = true
+	end
 end
 
 function menu:draw()
 	love.graphics.setBackgroundColor(0,0,0)
 	love.graphics.setColor(255,255,255)
-	--love.graphics.draw(imgBG,0,0)
-	
+	love.graphics.draw(imgBG,0,0)
+	animShip:draw(imgShip,sx,sy)
+
 	love.graphics.setFont(font)
 	for i = 1, #list do
 		local s = 0.5
@@ -75,6 +97,7 @@ function menu:keypressed(key)
 	local keyDown = "s"
 	local keyUp = "w"
 	local keyEnter = "return"
+	local keySpace = "space"
 
 	if key == keyDown then
 		if cursor ~= #list then
@@ -88,7 +111,7 @@ function menu:keypressed(key)
 		else
 			cursor = #list
 		end
-	elseif key == keyEnter then
+	elseif key == keyEnter or key == keySpace then
 		if onEnterList[cursor] ~= nil then
 			onEnterList[cursor]()
 		end
