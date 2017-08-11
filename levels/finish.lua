@@ -12,15 +12,12 @@ local list = {
 local imgHooray = love.graphics.newImage("assets/hooray.png")
 
 function fin:new()
-
 end
 
 function fin:load()
-
 end
 
 function fin:update(dt)
-
 end
 
 function fin:draw()
