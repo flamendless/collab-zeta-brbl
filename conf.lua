@@ -12,10 +12,15 @@ function love.conf(t)
 		(game.wHeight/game.gHeight))
 	game.scale = true
 
-	t.window.title = "Collab"
+	--for debugging tests
+	debugging = false
+	debug_gameBorder = false
+
+	t.window.title = "Last Lad"
 	t.window.width = game.wWidth
 	t.window.height = game.wHeight
-	t.console = true
+	t.window.icon = "assets/icon.png"
+	t.console = debugging
 
 	--print to console in real time
 	io.stdout:setvbuf("no")
@@ -28,7 +33,4 @@ function love.conf(t)
 	global.done = false
 	global.enemyDone = false
 
-	--for debugging tests
-	debugging = true
-	debug_gameBorder = false
 end
