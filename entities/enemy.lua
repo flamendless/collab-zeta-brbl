@@ -4,6 +4,16 @@ local imgEnemy = love.graphics.newImage("assets/ship.png")
 local ht = require("src/hitTimer")
 local quads = require("src.quads")
 
+local snd = {
+	explode = love.audio.newSource("assets/sfx/explode-enemy.wav","static"),
+	move = love.audio.newSource("assets/sfx/enemy-move-1.wav","stream"),
+}
+
+for k,v in pairs(snd) do
+	v:setLooping(false)
+end
+snd.move:setLooping(true)
+
 --set up table for enemy possible events macro
 local events = {
 	{
@@ -64,6 +74,11 @@ function enemy:eventDone()
 		if previous == self.eventID then
 			self:chooseAgain()
 		end
+		if self.eventID == "ltr" or
+			self.eventID == "rtl" or
+			self.eventID == "ttb" then
+			love.audio.play(snd.move)
+		end
 		self.x = self.events.x
 		self.y = self.events.y
 		self.tx = self.events.tx
@@ -79,7 +94,7 @@ end
 
 function enemy:new(x,y,speed)
 	self.image = imgEnemy
-	self.events = events[2]
+	self.events = events[1]
 	self.eventID = self.events.id
 	self.x = self.events.x
 	self.y = self.events.y
@@ -127,6 +142,7 @@ function enemy:update(dt)
 
 			em:remove(self)
 			global.enemyDone = true
+			love.audio.play(snd.explode)
 			global.shake = true
 		end
 	end
@@ -142,18 +158,21 @@ function enemy:update(dt)
 			self.x = self.x + self.speed * dt
 		else
 			d = true
+			love.audio.stop(snd.move)
 		end
 	elseif self.eventID == "rtl" then
 		if self.x > self.tx then
 			self.x = self.x - self.speed * dt
 		else
 			d = true
+			love.audio.stop(snd.move)
 		end
 	elseif self.eventID == "ttb" then
 		if self.y < self.ty then
 			self.y = self.y + self.speed * dt
 		else
 			d = true
+			love.audio.stop(snd.move)
 		end
 	else
 		d = true
@@ -165,6 +184,12 @@ end
 
 function enemy:onRemoveCondition()
 	return self.hp <= 0
+end
+
+function enemy:exit()
+	for k,v in pairs(snd) do
+		love.audio.stop(v)
+	end
 end
 
 return enemy

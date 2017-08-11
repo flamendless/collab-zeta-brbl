@@ -4,6 +4,12 @@ local anim = require("modules.anim8.anim8")
 
 local imgBG = love.graphics.newImage("assets/menuBG.png")
 local imgShip = love.graphics.newImage("assets/ship-sheet.png")
+local sndMain = love.audio.newSource("assets/sfx/last-lad-main.wav","static")
+local sndMoveCursor = love.audio.newSource("assets/sfx/move-cursor.wav","stream")
+local sndEnterCursor = love.audio.newSource("assets/sfx/enter-cursor.wav","stream")
+sndMain:setLooping(true)
+sndMoveCursor:setLooping(false)
+sndEnterCursor:setLooping(false)
 
 local gShip = anim.newGrid(8,8,imgShip:getDimensions())
 local animShip = anim.newAnimation(gShip('1-4',1),0.4)
@@ -39,7 +45,7 @@ function menu:new()
 end
 
 function menu:load()
-
+	love.audio.play(sndMain)
 end
 
 function menu:update(dt)
@@ -99,6 +105,9 @@ function menu:keypressed(key)
 	local keyEnter = "return"
 	local keySpace = "space"
 
+	if key == keyDown or key == keyUp then
+		love.audio.play(sndMoveCursor)
+	end
 	if key == keyDown then
 		if cursor ~= #list then
 			cursor = cursor + 1
@@ -114,8 +123,13 @@ function menu:keypressed(key)
 	elseif key == keyEnter or key == keySpace then
 		if onEnterList[cursor] ~= nil then
 			onEnterList[cursor]()
+			love.audio.play(sndEnterCursor)
 		end
 	end
+end
+
+function menu:exit()
+	love.audio.stop(sndMain)
 end
 
 return menu

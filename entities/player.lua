@@ -23,6 +23,20 @@ local gIdle = anim.newGrid(6,9,imgPlayer:getWidth(),imgPlayer:getHeight())
 local gJump = anim.newGrid(6,9,imgPlayer:getWidth(),imgPlayer:getHeight(),0,9)
 local gWalk = anim.newGrid(6,9,imgPlayer:getWidth(),imgPlayer:getHeight(),0,18)
 
+--sounds
+local snd = {
+	walk = love.audio.newSource("assets/sfx/walk.wav","static"),
+	jump = love.audio.newSource("assets/sfx/jump.wav","static"),
+	shield = love.audio.newSource("assets/sfx/shield.wav","static"),
+	shoot = love.audio.newSource("assets/sfx/shoot.wav","static"),
+	reload = love.audio.newSource("assets/sfx/reload.wav","static"),
+	death = love.audio.newSource("assets/sfx/explode-player.wav","static"),
+	enemy_death = love.audio.newSource("assets/sfx/explode-enemy.wav","static"),
+}
+for k,v in pairs(snd) do
+	v:setLooping(false)
+end
+
 local states = {}
 states.idle = anim.newAnimation(gIdle('1-2',1),0.5)
 states.jumping = anim.newAnimation(gJump('1-3',1),0.3, function()
@@ -89,8 +103,12 @@ function player:update(dt)
 			self.state = states.idle
 		end
 	end
+	if left or right then
+		love.audio.play(snd.walk)
+	end
 	--check if jump is pressed
 	if jump then
+		love.audio.play(snd.jump)
 		--check if on ground (yvel == 0)
 		if self.yvel == 0 then
 			--set yvel to jump height
@@ -131,6 +149,7 @@ function player:update(dt)
 			
 			--remove player object
 			em:remove(self)
+			love.audio.play(snd.death)
 			global.playerDeath = true
 		end
 	end
@@ -176,7 +195,7 @@ function player:keypressed(key)
 			end
 			local b = bullet(bx,by,bulletDirX,bulletDirY)
 			em:add(b)
-
+			love.audio.play(snd.shoot)
 			self.ammo = self.ammo - 1
 		end
 	elseif key == keyShield then
@@ -184,6 +203,7 @@ function player:keypressed(key)
 			if self.shieldPower >= shieldCost then
 				self.shield = shield(self,self.x + self.w/2,self.y + self.h/2,3)
 				em:add(self.shield)
+				love.audio.play(snd.shield)
 				self.shieldPower = self.shieldPower - shieldCost
 				self.shieldOn = true
 			end
@@ -192,6 +212,7 @@ function player:keypressed(key)
 
 	--if no ammo, reload
 	if key == reload then
+		love.audio.play(snd.reload)
 		self.ammo = self.maxAmmo
 	end
 end
@@ -203,6 +224,7 @@ function player:onCollision(object)
 
 		if self.shieldOn then
 			object.hp = 0
+			love.audio.play(snd.enemy_death)
 			global.shake = true
 		else
 			self.death = true

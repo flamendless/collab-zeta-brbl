@@ -5,6 +5,14 @@ function em:new()
 	self.entities = {}
 end
 
+function em:exit()
+	for k,v in pairs(self.entities) do
+		if v.exit ~= nil then
+			v:exit()
+		end
+	end
+end
+
 function em:add(ent)
 	table.insert(self.entities, ent)
 end

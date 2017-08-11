@@ -8,10 +8,20 @@ local list = {
 }
 local imgBooh = love.graphics.newImage("assets/booh.png")
 
+local sndEsc = love.audio.newSource("assets/sfx/escape.wav","stream")
+local sndLose = love.audio.newSource("assets/sfx/lose.wav","stream")
+sndLose:setLooping(false)
+sndEsc:setLooping(false)
+
 function gameover:new()
 end
 
 function gameover:load()
+	love.audio.play(sndLose)
+end
+
+function gameover:exit()
+	love.audio.stop(sndLose)
 end
 
 function gameover:update(dt)
@@ -42,6 +52,7 @@ function gameover:keypressed(key)
 	local keyEsc = "escape"
 
 	if key == keyEnter or key == keySpace or key == keyEsc then
+		love.audio.play(sndEsc)
 		love.event.quit("restart")
 	end
 end

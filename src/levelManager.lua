@@ -8,6 +8,9 @@ function lm:new()
 end
 
 function lm:switch(new)
+	if self.currentLevel.exit ~= nil then
+		self.currentLevel:exit()
+	end
 	self.currentLevel = new
 	self.currentLevel:load()
 end

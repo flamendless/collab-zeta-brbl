@@ -9,6 +9,8 @@ local list = {
 	"@flamendless",
 	"@ZetaHaro"
 }
+local sndEsc = love.audio.newSource("assets/sfx/escape.wav","stream")
+sndEsc:setLooping(false)
 
 function credits:new()
 
@@ -40,6 +42,7 @@ end
 
 function credits:keypressed(key)
 	lm:switch(menu)
+	love.audio.play(sndEsc)
 end
 
 return credits

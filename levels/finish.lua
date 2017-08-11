@@ -11,10 +11,19 @@ local list = {
 }
 local imgHooray = love.graphics.newImage("assets/hooray.png")
 
+local sndEsc = love.audio.newSource("assets/sfx/escape.wav","stream")
+sndEsc:setLooping(false)
+local sndWin = love.audio.newSource("assets/sfx/win.wav","stream")
+
 function fin:new()
 end
 
 function fin:load()
+	love.audio.play(sndWin)
+end
+
+function fin:exit()
+	love.audio.stop(sndWin)
 end
 
 function fin:update(dt)
@@ -45,6 +54,7 @@ function fin:keypressed(key)
 	local keyEsc = "escape"
 
 	if key == keyEnter or key == keySpace or key == keyEsc then
+		love.audio.play(sndEsc)
 		love.event.quit()
 	end
 end

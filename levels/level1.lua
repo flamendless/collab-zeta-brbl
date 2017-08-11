@@ -20,6 +20,10 @@ local timerEvent = 0
 
 local imgBG = love.graphics.newImage("assets/bg.png")
 
+local sndGame = love.audio.newSource("assets/sfx/last-lad-game.wav","stream")
+sndGame:setLooping(true)
+sndGame:setVolume(0.2)
+
 function level1:load()
 	--instantitiate the player
 	player1 = player(playerx, playery)
@@ -28,6 +32,13 @@ function level1:load()
 	em:add(player1)
 	em:add(enemy1)
 	em:add(ground1)
+
+	love.audio.play(sndGame)
+end
+
+function level1:exit()
+	love.audio.stop(sndGame)
+	em:exit()
 end
 
 function level1:update(dt)
