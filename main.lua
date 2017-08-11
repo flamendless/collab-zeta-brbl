@@ -13,11 +13,14 @@ gui = require("src/guiManager")()
 menu = require("levels/menu")
 credits = require("levels/credits")
 level1 = require("levels/level1")
+finish = require("levels/finish")
+gameover = require("levels/gameover")
 
 local sx,sy = 0,0
 local shakeForceMax = 50
 local shakeForce = shakeForceMax
 local shakeDecrease = 25
+local doneTimer = 0
 
 function love.load()
 	--start at menu
@@ -34,15 +37,26 @@ function love.update(dt)
 		end
 		if shakeForce <= 0 then
 			if global.done then
-				success = love.window.showMessageBox("Too Bad",
-					"You let the enemy crash into the earth. The crash created a massive crater and a deadly virus spreaded out.",
+				local success = love.window.showMessageBox("Too Bad",
+					"The Earth lost without a fight",
 					"info",
 					true)
 				love.event.quit()
 			end
 		end
 	end
+	if global.enemyDone or global.playerDeath then
+		doneTimer = doneTimer + 1 * dt
+		if doneTimer >= 3 then
+			doneTimer = 0
 
+			if global.enemyDone then
+				lm:switch(finish)	
+			elseif global.playerDeath then
+				lm:switch(gameover)
+			end
+		end
+	end
 	--update current level
 	lm:update(dt)
 end

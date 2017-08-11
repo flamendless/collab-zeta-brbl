@@ -1,6 +1,5 @@
 local class = require("modules.classic.classic")
 local player = class:extend()
-local particles = require("src.particles")
 local quads = require("src.quads")
 local anim = require("modules.anim8.anim8")
 

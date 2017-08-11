@@ -7,7 +7,7 @@ local list = {
 	"#LOWREZJAM",
 	"",
 	"@flamendless",
-	"@zetaharo"
+	"@ZetaHaro"
 }
 
 function credits:new()

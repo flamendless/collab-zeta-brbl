@@ -75,7 +75,7 @@ function bullet:onCollision(object)
 end
 
 function bullet:onRemoveCondition()
-	return self.x < -32 or self.x > game.gWidth + 32 or self.y < - 32
+	return self.x < 0 or self.x > game.gWidth or self.y < 0
 end
 
 return bullet

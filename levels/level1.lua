@@ -36,32 +36,35 @@ function level1:update(dt)
 		gui:update(dt)
 	end
 	--process the events
-	timerEvent = timerEvent + 1 * dt
-	if timerEvent >= 3 then
-		timerEvent = 0
-		--choose whether next event is missile or runner
-		local n = math.floor(math.random(100))
-		if n >= 50 then
-			spawnMissile = true
-			spawnRunner = false
-			spawnShield = false
-		elseif n < 49 then
-			spawnRunner = true
-			spawnMissile = false
-		end
-		if spawnMissile then
-			spawnMissile = false
-			--spawn 3 missiles
-			for i = 1, numMissiles do
-				local m = missile()
-				em:add(m)
+	if not global.enemyDone then
+		timerEvent = timerEvent + 1 * dt
+		if timerEvent >= 3 then
+			timerEvent = 0
+			--choose whether next event is missile or runner
+			local n = math.floor(math.random(100))
+			if n >= 50 then
+				spawnMissile = true
+				spawnRunner = false
+				spawnShield = false
+			elseif n < 49 then
+				spawnRunner = true
+				spawnMissile = false
 			end
-		elseif spawnRunner then
-			spawnRunner = false
-			local r = runner()
-			em:add(r)
+			if spawnMissile then
+				spawnMissile = false
+				--spawn 3 missiles
+				for i = 1, numMissiles do
+					local m = missile()
+					em:add(m)
+				end
+			elseif spawnRunner then
+				spawnRunner = false
+				local r = runner()
+				em:add(r)
+			end
 		end
 	end
+
 	--check remove condition for each entity
 	--memory management
 	em:removeConditions()
